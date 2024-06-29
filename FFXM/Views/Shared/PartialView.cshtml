@@ -1,0 +1,63 @@
+﻿@model FFXM.ViewModels.VmSale
+@{
+    ViewBag.Title = "Single";
+    var CreateDate = Model.CreateDate == null ? " " : Convert.ToDateTime(Model.CreateDate).ToString("yyyy-MM-dd");
+    var BV = Model.SaleId > 0 ? "Update" : "Add";
+    var indexItem = 0;
+}
+
+@using (Ajax.BeginForm(
+    "Single", "Sales",
+    new AjaxOptions
+    {
+        HttpMethod = "Post"
+    },
+    new { enctype = "multipart/form-data" }))
+
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.SaleId)
+    @Html.LabelFor(x => x.CustomerName)
+    <br />
+    @Html.TextBoxFor(x => x.CustomerName, new { required = "" })
+    <br />
+    @Html.LabelFor(x => x.Gender)
+    <div>
+        @Html.RadioButtonFor(x => x.Gender, "Male")
+        @Html.LabelFor(x => x.Gender, "Male")<br />
+        @Html.RadioButtonFor(x => x.Gender, "Female")
+        @Html.LabelFor(x => x.Gender, "Female")
+    </div>
+    <br />
+    @Html.LabelFor(x => x.CreateDate)
+    <br />
+    <input type="date" name="CreateDate" value="@CreateDate" />
+    <br /><br />
+    @Html.LabelFor(x => x.ProductType)
+    @Html.DropDownList("Select", (IEnumerable<SelectListItem>)ViewData["item"], (Model.ProductType.IsEmpty()) ? "Choose Option" : Model.ProductType)
+    <br /><br />
+    @Html.LabelFor(x => x.Photo, htmlAttributes: new { })
+    <input type="file" name="img" />
+    <br />
+    <button type="submit">@BV</button>
+    <a href="/Sales/Single">Reset</a>
+    <br />
+    <br />
+    <table>
+        <tr>
+            <th>ProductName</th>
+            <th>Price</th>
+            <th><button type="button" onclick="addItem()">AddItem</button></th>
+        </tr>
+        <tbody id="tSD">
+            @foreach (var item in Model.SaleDetails)
+            {
+                <tr id="tr_@indexItem">
+                    <td><input type="text" name="ProductName" value="@item.ProductName" /></td>
+                    <td><input type="number" name="Price" value="@item.Price" /></td>
+                    <td><a href="javascript:void(0)" onclick="removeItem(@indexItem)">Remove</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

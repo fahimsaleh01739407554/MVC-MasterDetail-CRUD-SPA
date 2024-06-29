@@ -1,0 +1,11 @@
+﻿@model FFXM.Models.SaleDetail
+@using (Ajax.BeginForm("Edit", "Sales", null, new AjaxOptions() { HttpMethod = "POST" },new { enctype = "multipart/form-data" }))
+{
+    <div class="modal-body">      
+    </div>
+    <button type="button" data-dismiss="modal">Close</button>
+    <input type="submit" value="Save" />
+}
+
+
+

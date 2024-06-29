@@ -1,0 +1,67 @@
+﻿@model FFXM.ViewModels.VmSale
+@{
+    ViewBag.Title = "Single";
+    var listSaleMaster = ViewData["List"] as List<FFXM.Models.SaleMaster>;
+}
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<h2>SPA with Rajor Ajax</h2>
+@Html.Partial("PartialView")
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Date</th>
+        <th>ProductType</th>
+        <th>Photo</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    @foreach (var item in listSaleMaster)
+    {
+        <tr>
+            <td>@item.CustomerName</td>
+            <td>@item.Gender</td>
+            <td>@item.CreateDate</td>
+            <td>@item.ProductType</td>
+            <td><img src="@item.Photo" width="120" height="150" /></td>
+            <td><a href="/Sales/Single?id=@item.SaleId">Edit</a></td>
+            <td>
+                <button onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-black">Open Modal</button>
+            </td>
+            <td><a href="/Sales/SingleDelete?id=@item.SaleId">Delete</a></td>
+        </tr>
+    }
+</table>
+<script>
+    var indexItem = 0;
+    function addItem() {
+        indexItem++;
+        var TRs = `<tr id="tr_${indexItem}">
+                    <td><input type="text" name="ProductName" value=" " /></td>
+                    <td><input type="number" name="Price" value=" " /></td>
+                    <td><a href="javascript:void(0)" onclick="removeItem(${indexItem})">Remove</a></td>
+                </tr>`;
+        document.getElementById('tSD').innerHTML += TRs;
+    }
+    function removeItem(id) {
+        document.getElementById(`tr_${id}`).remove();
+    }
+</script>
+     <div id="id01" class="w3-modal">
+         <div class="w3-modal-content">
+             <header class="w3-container w3-teal">
+                 <span onclick="document.getElementById('id01').style.display='none'"
+                       class="w3-button w3-display-topright">&times;</span>
+                 <h2>Modal Header</h2>
+             </header>
+             @{
+                 Html.RenderPartial("Edit", new FFXM.Models.SaleDetail());
+             }
+             <footer class="w3-container w3-teal">
+                 <p>Modal Footer</p>
+             </footer>
+         </div>
+        </div>
+
+
+
